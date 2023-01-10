@@ -9,67 +9,67 @@ import SwiftUI
 import Combine
 import os
 
-protocol NumberFormatterProtocol: AnyObject {
-    func string(from number: NSNumber) -> String?
-    func string(for obj: Any?) -> String?
-    var numberStyle: NumberFormatter.Style { get set }
-    var maximumFractionDigits: Int { get set }
-}
+//protocol NumberFormatterProtocol: AnyObject {
+//    func string(from number: NSNumber) -> String?
+//    func string(for obj: Any?) -> String?
+//    var numberStyle: NumberFormatter.Style { get set }
+//    var maximumFractionDigits: Int { get set }
+//}
 
-extension NumberFormatter: NumberFormatterProtocol { }
+//extension NumberFormatter: NumberFormatterProtocol { }
 
-class PreviewNumberFormatter: NumberFormatterProtocol {
-    
-    let numberFormatter: NumberFormatter
-    
-    init(locale: Locale) {
-        numberFormatter = NumberFormatter()
-        numberFormatter.locale = locale
-    }
-    
-    var numberStyle: NumberFormatter.Style {
-        get {
-            return numberFormatter.numberStyle
-        }
-        set {
-            numberFormatter.numberStyle = newValue
-        }
-    }
-    
-    var maximumFractionDigits: Int {
-        get {
-            return numberFormatter.maximumFractionDigits
-        }
-        set {
-            numberFormatter.maximumFractionDigits = newValue
-        }
-    }
-    
-    func string(from number: NSNumber) -> String? {
-        return numberFormatter.string(from: number)
-    }
-    
-    func string(for obj: Any?) -> String? {
-        numberFormatter.string(for: obj)
-    }
-}
+//class PreviewNumberFormatter: NumberFormatterProtocol {
+//
+//    let numberFormatter: NumberFormatter
+//
+//    init(locale: Locale) {
+//        numberFormatter = NumberFormatter()
+//        numberFormatter.locale = locale
+//    }
+//
+//    var numberStyle: NumberFormatter.Style {
+//        get {
+//            return numberFormatter.numberStyle
+//        }
+//        set {
+//            numberFormatter.numberStyle = newValue
+//        }
+//    }
+//
+//    var maximumFractionDigits: Int {
+//        get {
+//            return numberFormatter.maximumFractionDigits
+//        }
+//        set {
+//            numberFormatter.maximumFractionDigits = newValue
+//        }
+//    }
+//
+//    func string(from number: NSNumber) -> String? {
+//        return numberFormatter.string(from: number)
+//    }
+//
+//    func string(for obj: Any?) -> String? {
+//        numberFormatter.string(for: obj)
+//    }
+//}
 
 struct ContentView: View {
     @State private var isSubtitleHidden = false
-    @State private var value = 10
+    @State private var value: Decimal = 10
     
     private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!,
                                        category: String(describing: ContentView.self))
     
     
-    private var numberFormatter: NumberFormatterProtocol
-    
-    init(numberFormatter: NumberFormatterProtocol = NumberFormatter()) {
-        Self.logger.trace("init")
-        self.numberFormatter = numberFormatter
-        self.numberFormatter.numberStyle = .currency
-        self.numberFormatter.maximumFractionDigits = 2
-    }
+//    private var numberFormatter: NumberFormatterProtocol
+//
+//    init(numberFormatter: NumberFormatterProtocol = NumberFormatter()) {
+//        Self.logger.trace("init")
+//        self.numberFormatter = numberFormatter
+//        self.numberFormatter.numberStyle = .currency
+//        self.numberFormatter.maximumFractionDigits = 2
+//    }
 
     var body: some View {
         VStack(spacing: 20) {
@@ -77,9 +77,9 @@ struct ContentView: View {
             Text("Send money")
                 .font(.title)
             
-            Text("\(value)")
+            //Text("\(value)")
             
-            CurrencyTextField(numberFormatter: numberFormatter, value: $value)
+            CurrencyTextField(value: $value)
                 .padding(20)
                 .overlay(RoundedRectangle(cornerRadius: 16)
                             .stroke(Color.gray.opacity(0.3), lineWidth: 2))
@@ -102,7 +102,7 @@ struct ContentView: View {
                 
                 
             if isSubtitleHidden {
-                Text("Sending \(value)")
+                Text("Sending \(value.description)")
             }
             
             Spacer()
@@ -112,10 +112,10 @@ struct ContentView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView(numberFormatter: 
-                        PreviewNumberFormatter(locale: Locale(identifier: "en_US"))
-        )
-    }
-}
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ContentView(numberFormatter:
+//                        PreviewNumberFormatter(locale: Locale(identifier: "en_US"))
+//        )
+//    }
+//}
