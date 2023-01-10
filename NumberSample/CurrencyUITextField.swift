@@ -96,6 +96,27 @@ class CurrencyUITextField: UITextField {
         Self.logger.trace("currency(from decimal) \(self.formatter.string(for: decimal) ?? "")")
         return formatter.string(for: decimal) ?? ""
     }
+    
+    //prevent user from moving the cursor
+    override func closestPosition(to point: CGPoint) -> UITextPosition? {
+        return self.endOfDocument
+    }
+    
+    //prevent user from moving cursor with copy paster ui
+    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return !isFirstResponder
+    }
+}
+
+extension CurrencyUITextField: UITextFieldDelegate {
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        Self.logger.trace("textFieldShouldBeginEditing text: \(textField.text ?? "empty")")
+        textField.selectedTextRange = textRange(from: endOfDocument, to: endOfDocument) //starts the editing caret in all the way to the right
+        //textField
+        return true
+    }
+
 }
 
 extension StringProtocol where Self: RangeReplaceableCollection {
