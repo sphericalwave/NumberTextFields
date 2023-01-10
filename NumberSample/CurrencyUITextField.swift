@@ -22,7 +22,8 @@ class CurrencyUITextField: UITextField {
         self.formatter = formatter
         self._value = value
         super.init(frame: .zero)
-        setupViews()
+        self.delegate = self
+        self.font = .systemFont(ofSize: 40, weight: .regular)
     }
     
     required init?(coder: NSCoder) {
@@ -34,16 +35,9 @@ class CurrencyUITextField: UITextField {
         
         super.willMove(toSuperview: superview)
         addTarget(self, action: #selector(editingChanged), for: .editingChanged)
-        addTarget(self, action: #selector(resetSelection), for: .allTouchEvents)
         keyboardType = .numberPad
         textAlignment = .right
         sendActions(for: .editingChanged)
-    }
-    
-    override func removeFromSuperview() {
-        Self.logger.trace("removeFromSuperview")
-        
-        print(#function)
     }
     
     override func deleteBackward() {
@@ -52,22 +46,11 @@ class CurrencyUITextField: UITextField {
         sendActions(for: .editingChanged)
     }
     
-    private func setupViews() {
-        Self.logger.trace("setupViews")
-        //tintColor = .clear
-        font = .systemFont(ofSize: 40, weight: .regular)
-    }
-    
     @objc private func editingChanged() {
         Self.logger.trace("editingChanged")
         text = currency(from: decimal)
-        resetSelection()
+        //resetSelection()
         updateValue()
-    }
-    
-    @objc private func resetSelection() {
-        Self.logger.trace("resetSelection")
-        selectedTextRange = textRange(from: endOfDocument, to: endOfDocument)
     }
     
     private func updateValue() {
@@ -112,11 +95,18 @@ extension CurrencyUITextField: UITextFieldDelegate {
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         Self.logger.trace("textFieldShouldBeginEditing text: \(textField.text ?? "empty")")
-        textField.selectedTextRange = textRange(from: endOfDocument, to: endOfDocument) //starts the editing caret in all the way to the right
-        //textField
+        //start the editing cursor in all the way to the right
+        textField.selectedTextRange = textRange(from: endOfDocument, to: endOfDocument)
         return true
     }
 
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        Self.logger.trace("shouldChangeCharactersIn")
+        text = currency(from: decimal)
+        //resetSelection()
+        updateValue()
+        return true
+    }
 }
 
 extension StringProtocol where Self: RangeReplaceableCollection {
