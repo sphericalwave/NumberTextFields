@@ -41,6 +41,7 @@ struct CurrencyTextField: UIViewRepresentable {
     //TODO: SwiftUI to UIKit is not working
     func updateUIView(_ uiView: CurrencyUITextField, context: Context) {
         Self.logger.trace("updateUIView")
+        //This is the source of trouble
 //        let decimal = value / pow(10, formatter.maximumFractionDigits)
 //        uiView.decimal = decimal
 //        uiView.text = formatter.string(for: decimal)
