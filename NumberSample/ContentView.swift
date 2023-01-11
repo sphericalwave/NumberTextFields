@@ -17,6 +17,12 @@ struct ContentView: View {
                                        category: String(describing: ContentView.self))
     
     var body: some View {
+        List {
+            basicTF
+        }
+    }
+    
+    var currency: some View {
         VStack(spacing: 20) {
             
             Text("Send money")
@@ -57,6 +63,14 @@ struct ContentView: View {
         }
         .padding(.top, 60)
         .padding(.horizontal, 20)
+    }
+    
+    var decimal: some View {
+        Text("decimal")
+    }
+    
+    var basicTF: some View {
+        Text("basicTF")
     }
 }
 

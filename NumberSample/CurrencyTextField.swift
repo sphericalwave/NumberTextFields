@@ -19,21 +19,20 @@ struct CurrencyTextField: UIViewRepresentable {
     
     private let formatter: NumberFormatter
 
-
     init(value: Binding<Decimal>) {
         Self.logger.trace("init \(value.wrappedValue)")
         self._value = value
         
+        //if this is being rebuilt all the time this is a performance hit
         let nmbrFrmt = NumberFormatter()
         nmbrFrmt.numberStyle = .currency
         nmbrFrmt.maximumFractionDigits = 2
-        
         self.formatter = nmbrFrmt
     }
 
     func makeUIView(context: Context) -> CurrencyUITextField {
         Self.logger.trace("makeUIView")
-        let currencyField = CurrencyUITextField(decimal: value)
+        let currencyField = CurrencyUITextField(decimal: value, formatter: formatter)
         currencyField.delegate = context.coordinator
         return currencyField
     }
@@ -48,7 +47,7 @@ struct CurrencyTextField: UIViewRepresentable {
     }
     
     func makeCoordinator() -> Coordinator {
-        Coordinator(value: $value)
+        Coordinator(value: $value, formatter: formatter)
     }
     
     class Coordinator: NSObject, UITextFieldDelegate {
@@ -59,15 +58,10 @@ struct CurrencyTextField: UIViewRepresentable {
         @Binding var value: Decimal
         private let formatter: NumberFormatter //TODO: there are two formatters
         
-        init(value: Binding<Decimal>) {
+        init(value: Binding<Decimal>, formatter: NumberFormatter) {
             Self.logger.trace("init")
             self._value = value
-            
-            let nmbrFrmt = NumberFormatter()
-            nmbrFrmt.numberStyle = .currency
-            nmbrFrmt.maximumFractionDigits = 2
-            
-            self.formatter = nmbrFrmt
+            self.formatter = formatter
         }
         
         func textFieldDidChangeSelection(_ textField: UITextField) {

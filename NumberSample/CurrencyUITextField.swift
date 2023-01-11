@@ -16,19 +16,15 @@ class CurrencyUITextField: UITextField {
     private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!,
                                        category: String(describing: CurrencyUITextField.self))
     
-    init(decimal: Decimal) {
+    init(decimal: Decimal, formatter: NumberFormatter) {
         Self.logger.trace("init \(decimal)")
-        
-        let nmbrFrmt = NumberFormatter()
-        nmbrFrmt.numberStyle = .currency
-        nmbrFrmt.maximumFractionDigits = 2
-        
-        self.formatter = nmbrFrmt
+        self.formatter = formatter
         self.decimal = decimal
         super.init(frame: .zero)
-        self.font = .systemFont(ofSize: 40, weight: .regular)
+        self.font =  UIFont.systemFont(ofSize: 17, weight: .regular) //TODO: match font
         self.keyboardType = .numberPad
         self.textAlignment = .right
+        self.borderStyle = .roundedRect
     }
     
     required init?(coder: NSCoder) {
