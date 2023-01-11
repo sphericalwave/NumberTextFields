@@ -24,6 +24,9 @@ struct ContentView: View {
             
             Text(value.description)
             
+            TextField(".number", value: $value, format: .number)
+                .keyboardType(.decimalPad)
+            
             CurrencyTextField(value: $value)
                 .padding(20)
                 .overlay(RoundedRectangle(cornerRadius: 16)
