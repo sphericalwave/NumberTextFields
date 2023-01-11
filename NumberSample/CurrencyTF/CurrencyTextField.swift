@@ -56,7 +56,7 @@ struct CurrencyTextField: UIViewRepresentable {
                                            category: String(describing: Coordinator.self))
         
         @Binding var value: Decimal
-        private let formatter: NumberFormatter //TODO: there are two formatters
+        private let formatter: NumberFormatter
         
         init(value: Binding<Decimal>, formatter: NumberFormatter) {
             Self.logger.trace("init")

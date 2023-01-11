@@ -18,7 +18,12 @@ struct ContentView: View {
     
     var body: some View {
         List {
-            basicTF
+            
+            currency
+            
+            //basicTF
+            
+            //decimalFields
         }
     }
     
@@ -65,8 +70,30 @@ struct ContentView: View {
         .padding(.horizontal, 20)
     }
     
-    var decimal: some View {
-        Text("decimal")
+    @State var decimal: Decimal = 1
+    var decimalFields: some View {
+        VStack {
+            
+            HStack {
+                Text("decimal")
+                Spacer()
+                Text(decimal.description)
+            }
+            
+            HStack {
+                Text("swiftUI")
+                Spacer()
+                TextField("test", value: $decimal, format: .number)
+                    .textFieldStyle(.roundedBorder)
+                    .keyboardType(.numberPad)
+            }
+            
+            HStack {
+                Text("uiKit")
+                Spacer()
+                DecimalTF(decimal: $decimal)
+            }
+        }
     }
     
     @State var text = "CustomTF Test"
