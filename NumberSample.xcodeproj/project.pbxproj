@@ -14,7 +14,7 @@
 		14B77555272AD8DA008083A8 /* NumberSampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B77554272AD8DA008083A8 /* NumberSampleTests.swift */; };
 		14B77560272AD8DA008083A8 /* NumberSampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B7755F272AD8DA008083A8 /* NumberSampleUITests.swift */; };
 		6FF1EDD827B5061B009835B0 /* CurrencyUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FF1EDD727B5061B009835B0 /* CurrencyUITextField.swift */; };
-		6FF1EDDA27B50632009835B0 /* CurrencyTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FF1EDD927B50632009835B0 /* CurrencyTextField.swift */; };
+		6FF1EDDA27B50632009835B0 /* CurrencyTF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FF1EDD927B50632009835B0 /* CurrencyTF.swift */; };
 		AF880395296F3C7F00FE5880 /* CustomUiTF.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF880394296F3C7E00FE5880 /* CustomUiTF.swift */; };
 		AF880397296F42CB00FE5880 /* DecimalTF.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF880396296F42CB00FE5880 /* DecimalTF.swift */; };
 /* End PBXBuildFile section */
@@ -50,7 +50,7 @@
 		14B7755F272AD8DA008083A8 /* NumberSampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberSampleUITests.swift; sourceTree = "<group>"; };
 		14B77561272AD8DA008083A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6FF1EDD727B5061B009835B0 /* CurrencyUITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyUITextField.swift; sourceTree = "<group>"; };
-		6FF1EDD927B50632009835B0 /* CurrencyTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyTextField.swift; sourceTree = "<group>"; };
+		6FF1EDD927B50632009835B0 /* CurrencyTF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyTF.swift; sourceTree = "<group>"; };
 		AF880394296F3C7E00FE5880 /* CustomUiTF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomUiTF.swift; sourceTree = "<group>"; };
 		AF880396296F42CB00FE5880 /* DecimalTF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecimalTF.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -145,7 +145,7 @@
 			isa = PBXGroup;
 			children = (
 				6FF1EDD727B5061B009835B0 /* CurrencyUITextField.swift */,
-				6FF1EDD927B50632009835B0 /* CurrencyTextField.swift */,
+				6FF1EDD927B50632009835B0 /* CurrencyTF.swift */,
 			);
 			path = CurrencyTF;
 			sourceTree = "<group>";
@@ -282,7 +282,7 @@
 				14B77545272AD8D9008083A8 /* ContentView.swift in Sources */,
 				AF880395296F3C7F00FE5880 /* CustomUiTF.swift in Sources */,
 				14B77543272AD8D9008083A8 /* NumberSampleApp.swift in Sources */,
-				6FF1EDDA27B50632009835B0 /* CurrencyTextField.swift in Sources */,
+				6FF1EDDA27B50632009835B0 /* CurrencyTF.swift in Sources */,
 				6FF1EDD827B5061B009835B0 /* CurrencyUITextField.swift in Sources */,
 				AF880397296F42CB00FE5880 /* DecimalTF.swift in Sources */,
 			);

@@ -79,9 +79,6 @@ class DecimalUiTF: UITextField {
     init(text: String) {
         Self.logger.trace("init(text: String)")
         super.init(frame: .zero)
-//        self.text = text
-//        self.textColor = .red
-        
         self.font =  UIFont.systemFont(ofSize: 17, weight: .regular) //TODO: match font
         self.keyboardType = .numberPad
         self.textAlignment = .right

@@ -38,7 +38,7 @@ struct ContentView: View {
             TextField(".number", value: $value, format: .number)
                 .keyboardType(.decimalPad)
             
-            CurrencyTextField(value: $value)
+            CurrencyTF(value: $value)
                 .padding(20)
                 .overlay(RoundedRectangle(cornerRadius: 16)
                     .stroke(Color.gray.opacity(0.3), lineWidth: 2))

@@ -10,12 +10,26 @@ import SwiftUI
 import os
 import UIKit
 
-struct CurrencyTextField: UIViewRepresentable {
+extension StringProtocol where Self: RangeReplaceableCollection {
+    var digits: Self {
+        //print("StringProtocol digits")
+        return filter (\.isWholeNumber)
+    }
+}
+
+extension String {
+    var decimal: Decimal {
+        //print("String decimal")
+        return Decimal(string: digits) ?? 0
+    }
+}
+
+struct CurrencyTF: UIViewRepresentable {
 
     typealias UIViewType = CurrencyUITextField
     @Binding var value: Decimal
     private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!,
-                                       category: String(describing: CurrencyTextField.self))
+                                       category: String(describing: CurrencyTF.self))
     
     private let formatter: NumberFormatter
 
@@ -36,14 +50,10 @@ struct CurrencyTextField: UIViewRepresentable {
         currencyField.delegate = context.coordinator
         return currencyField
     }
-
-    //TODO: SwiftUI to UIKit is not working
+    
     func updateUIView(_ uiView: CurrencyUITextField, context: Context) {
         Self.logger.trace("updateUIView")
-        //This is the source of trouble
-//        let decimal = value / pow(10, formatter.maximumFractionDigits)
-//        uiView.decimal = decimal
-//        uiView.text = formatter.string(for: decimal)
+        uiView.text = formatter.string(for: value)
     }
     
     func makeCoordinator() -> Coordinator {
@@ -56,7 +66,7 @@ struct CurrencyTextField: UIViewRepresentable {
                                            category: String(describing: Coordinator.self))
         
         @Binding var value: Decimal
-        private let formatter: NumberFormatter
+       private let formatter: NumberFormatter
         
         init(value: Binding<Decimal>, formatter: NumberFormatter) {
             Self.logger.trace("init")
@@ -64,14 +74,13 @@ struct CurrencyTextField: UIViewRepresentable {
             self.formatter = formatter
         }
         
-        func textFieldDidChangeSelection(_ textField: UITextField) {
-            Self.logger.trace("textFieldDidChangeSelection")
-            
-        }
+//        func textFieldDidChangeSelection(_ textField: UITextField) {
+//            Self.logger.trace("textFieldDidChangeSelection")
+//        }
         
+        //keep cursor all the way to the right
         func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
             Self.logger.trace("textFieldShouldBeginEditing text: \(textField.text ?? "empty")")
-            //start the editing cursor in all the way to the right
             textField.selectedTextRange = textField.textRange(from: textField.endOfDocument, to: textField.endOfDocument)
             return true
         }
@@ -79,6 +88,7 @@ struct CurrencyTextField: UIViewRepresentable {
         func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
             Self.logger.trace("shouldChangeCharactersIn")
             
+            //backspace
             guard string != "" else {
                 Self.logger.trace("deleteBackward")
                 if let text = textField.text {
@@ -86,21 +96,20 @@ struct CurrencyTextField: UIViewRepresentable {
                     let removeLeastChar = String(removeFrmt.dropLast())
                     let decimal = removeLeastChar.decimal / pow(10, formatter.maximumFractionDigits)
                     self.value = decimal
-                    textField.text = formatter.string(for: decimal)
                 }
                 return false
             }
             
+            //add text
             if let text = textField.text {
                 let removeFrmt = text.digits
                 let appendChar = removeFrmt.appending(string)
                 let decimal = appendChar.decimal / pow(10, formatter.maximumFractionDigits)
                 self.value = decimal
-                textField.text = formatter.string(for: decimal)
+                return false
             }
-            else {
-                fatalError()
-            }
+            
+            //unused
             return false //prevent conventional replacement bcs handling textfield update above
         }
     }

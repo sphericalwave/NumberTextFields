@@ -25,11 +25,17 @@ class CurrencyUITextField: UITextField {
         self.keyboardType = .numberPad
         self.textAlignment = .right
         self.borderStyle = .roundedRect
-        self.text = formatter.string(for: decimal)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    //update initial appearance
+    override func willMove(toSuperview newSuperview: UIView?) {
+        Self.logger.trace("willMove toSuperView")
+        super.willMove(toSuperview: superview)
+        self.text = formatter.string(for: decimal)
     }
     
     //prevent user from moving the cursor
@@ -41,19 +47,5 @@ class CurrencyUITextField: UITextField {
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         //editingChanged()
         return !isFirstResponder
-    }
-}
-
-extension StringProtocol where Self: RangeReplaceableCollection {
-    var digits: Self {
-        //print("StringProtocol digits")
-        return filter (\.isWholeNumber)
-    }
-}
-
-extension String {
-    var decimal: Decimal {
-        //print("String decimal")
-        return Decimal(string: digits) ?? 0
     }
 }
