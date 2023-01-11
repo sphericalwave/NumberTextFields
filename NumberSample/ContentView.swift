@@ -9,51 +9,6 @@ import SwiftUI
 import Combine
 import os
 
-//protocol NumberFormatterProtocol: AnyObject {
-//    func string(from number: NSNumber) -> String?
-//    func string(for obj: Any?) -> String?
-//    var numberStyle: NumberFormatter.Style { get set }
-//    var maximumFractionDigits: Int { get set }
-//}
-
-//extension NumberFormatter: NumberFormatterProtocol { }
-
-//class PreviewNumberFormatter: NumberFormatterProtocol {
-//
-//    let numberFormatter: NumberFormatter
-//
-//    init(locale: Locale) {
-//        numberFormatter = NumberFormatter()
-//        numberFormatter.locale = locale
-//    }
-//
-//    var numberStyle: NumberFormatter.Style {
-//        get {
-//            return numberFormatter.numberStyle
-//        }
-//        set {
-//            numberFormatter.numberStyle = newValue
-//        }
-//    }
-//
-//    var maximumFractionDigits: Int {
-//        get {
-//            return numberFormatter.maximumFractionDigits
-//        }
-//        set {
-//            numberFormatter.maximumFractionDigits = newValue
-//        }
-//    }
-//
-//    func string(from number: NSNumber) -> String? {
-//        return numberFormatter.string(from: number)
-//    }
-//
-//    func string(for obj: Any?) -> String? {
-//        numberFormatter.string(for: obj)
-//    }
-//}
-
 struct ContentView: View {
     @State private var isSubtitleHidden = false
     @State private var value: Decimal = 10
@@ -61,23 +16,13 @@ struct ContentView: View {
     private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!,
                                        category: String(describing: ContentView.self))
     
-    
-//    private var numberFormatter: NumberFormatterProtocol
-//
-//    init(numberFormatter: NumberFormatterProtocol = NumberFormatter()) {
-//        Self.logger.trace("init")
-//        self.numberFormatter = numberFormatter
-//        self.numberFormatter.numberStyle = .currency
-//        self.numberFormatter.maximumFractionDigits = 2
-//    }
-
     var body: some View {
         VStack(spacing: 20) {
             
             Text("Send money")
                 .font(.title)
             
-            //Text("\(value)")
+            Text(value.description)
             
             CurrencyTextField(value: $value)
                 .padding(20)

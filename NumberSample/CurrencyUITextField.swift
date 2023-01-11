@@ -11,10 +11,8 @@ import SwiftUI
 import os
 
 class CurrencyUITextField: UITextField {
-    //@Binding private var value: Int
     @Binding var decimal: Decimal
     private let formatter: NumberFormatter
-    
     private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!,
                                        category: String(describing: CurrencyUITextField.self))
     
@@ -24,11 +22,9 @@ class CurrencyUITextField: UITextField {
         let nmbrFrmt = NumberFormatter()
         nmbrFrmt.numberStyle = .currency
         nmbrFrmt.maximumFractionDigits = 2
-        //nmbrFrmt.minimumFractionDigits = 2
         
         self.formatter = nmbrFrmt
         self._decimal = decimal
-        //self.decimal = Decimal(integerLiteral: value.wrappedValue) //textValue.decimal / pow(10, formatter.maximumFractionDigits)
         super.init(frame: .zero)
         
         self.text = formatter.string(for: decimal)
@@ -42,17 +38,10 @@ class CurrencyUITextField: UITextField {
         fatalError("init(coder:) has not been implemented")
     }
     
-//    override func viewDidAppear() {
-//        super.viewWillAppear()
-//        self.text = formatter.string(for: decimal)
-//    }
-    
     override func willMove(toSuperview newSuperview: UIView?) {
         Self.logger.trace("willMove toSuperView")
         super.willMove(toSuperview: superview)
         self.text = formatter.string(for: decimal)
-//        addTarget(self, action: #selector(editingChanged), for: .editingChanged)
-//        sendActions(for: .editingChanged)
     }
     
     override func deleteBackward() {
@@ -69,45 +58,7 @@ class CurrencyUITextField: UITextField {
             self.decimal = 0
             text = formatter.string(for: decimal)
         }
-        //text = (text ?? "").digits.dropLast().string  //TODO: remove digits extension
-        //sendActions(for: .editingChanged)
-        //TODO: update decimal
-        //text = formatter.string(for: decimal)
     }
-    
-//    @objc private func editingChanged() {
-//        Self.logger.trace("editingChanged")
-//        //text = currency(from: decimal)
-//        updateValue()
-//    }
-    
-//    private func updateValue() {
-//        DispatchQueue.main.async { [weak self] in
-//            Self.logger.trace("updateValue \(self?.intValue ?? 0)")
-//            self?.value = self?.intValue ?? 0
-//        }
-//    }
-    
-//    private var textValue: String {
-//        Self.logger.trace("textValue \(self.text ?? "")")
-//        return text ?? ""
-//    }
-    
-    
-//    private var decimal: Decimal {
-//        Self.logger.trace("decimal \(self.textValue.decimal) / \(pow(10, self.formatter.maximumFractionDigits)) = \(self.textValue.decimal / pow(10, self.formatter.maximumFractionDigits))")
-//        return textValue.decimal / pow(10, formatter.maximumFractionDigits)
-//    }
-    
-    private var intValue: Int {
-        Self.logger.trace("intValue \(NSDecimalNumber(decimal: self.decimal * 100).intValue)")
-        return NSDecimalNumber(decimal: decimal * 100).intValue
-    }
-    
-//    private func currency(from decimal: Decimal) -> String {
-//        Self.logger.trace("currency(from decimal) \(self.formatter.string(for: decimal) ?? "")")
-//        return formatter.string(for: decimal) ?? ""
-//    }
     
     //prevent user from moving the cursor
     override func closestPosition(to point: CGPoint) -> UITextPosition? {
@@ -147,11 +98,6 @@ extension CurrencyUITextField: UITextFieldDelegate {
         else {
             fatalError()
         }
-        
-        //text = formatter.string(for: decimal) ?? "" //currency(from: decimal)
-        //decimal = (text ?? "").decimal / pow(10, formatter.maximumFractionDigits)
-        //resetSelection()
-        //TODO: updateValue()
         return false //prevent conventional replacement bcs handling textfield update above
     }
 }
@@ -169,9 +115,3 @@ extension String {
         return Decimal(string: digits) ?? 0
     }
 }
-
-//extension LosslessStringConvertible {
-//    var string: String {
-//        .init(self)
-//    }
-//}
