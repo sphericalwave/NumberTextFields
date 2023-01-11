@@ -36,7 +36,7 @@ struct ContentView: View {
             CurrencyTextField(value: $value)
                 .padding(20)
                 .overlay(RoundedRectangle(cornerRadius: 16)
-                            .stroke(Color.gray.opacity(0.3), lineWidth: 2))
+                    .stroke(Color.gray.opacity(0.3), lineWidth: 2))
                 .frame(height: 100)
             
             Rectangle()
@@ -53,8 +53,8 @@ struct ContentView: View {
                         isSubtitleHidden.toggle()
                     }
                 }
-                
-                
+            
+            
             if isSubtitleHidden {
                 Text("Sending \(value.description)")
             }
@@ -71,8 +71,28 @@ struct ContentView: View {
     
     @State var text = "CustomTF Test"
     var basicTF: some View {
-        //Text("basicTF")
-        CustomTF(text: $text)
+        
+        VStack {
+            
+            HStack {
+                Text("text")
+                Spacer()
+                Text(text)
+            }
+            
+            HStack {
+                Text("swiftUI")
+                Spacer()
+                TextField("test", text: $text)
+                    .textFieldStyle(.roundedBorder)
+            }
+            
+            HStack {
+                Text("uiKit")
+                Spacer()
+                CustomTF(text: $text)
+            }
+        }
     }
 }
 

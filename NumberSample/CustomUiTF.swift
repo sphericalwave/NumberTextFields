@@ -17,7 +17,7 @@ class CustomUiTF: UITextField {
         Self.logger.trace("init(text: String)")
         super.init(frame: .zero)
         self.text = text
-        self.textColor = .blue
+        self.textColor = .red
     }
     
     required init?(coder: NSCoder) {
@@ -36,13 +36,14 @@ struct CustomTF: UIViewRepresentable {
     func makeUIView(context: Context) -> CustomUiTF {
         Self.logger.trace("makeUIView(context: Context)")
         let tf = CustomUiTF(text: text)
+        tf.borderStyle = .roundedRect
         tf.delegate = context.coordinator
         return tf
     }
     
     func updateUIView(_ uiView: CustomUiTF, context: Context) {
         Self.logger.trace("updateUIView")
-        uiView.text = context.coordinator.text
+        uiView.text = text
     }
     
     func makeCoordinator() -> Coordinator {
@@ -62,6 +63,7 @@ struct CustomTF: UIViewRepresentable {
         
         func textFieldDidChangeSelection(_ textField: UITextField) {
             Self.logger.trace("textFieldDidChangeSelection")
+            text = textField.text ?? ""
         }
     }
 }
