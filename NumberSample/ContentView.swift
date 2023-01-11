@@ -69,8 +69,10 @@ struct ContentView: View {
         Text("decimal")
     }
     
+    @State var text = "CustomTF Test"
     var basicTF: some View {
-        Text("basicTF")
+        //Text("basicTF")
+        CustomTF(text: $text)
     }
 }
 
