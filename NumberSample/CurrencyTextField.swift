@@ -12,16 +12,12 @@ import os
 struct CurrencyTextField: UIViewRepresentable {
 
     typealias UIViewType = CurrencyUITextField
-
-    //let numberFormatter: NumberFormatterProtocol
     let currencyField: CurrencyUITextField
-    
     private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!,
                                        category: String(describing: CurrencyTextField.self))
 
     init(value: Binding<Decimal>) {
         Self.logger.trace("init \(value.wrappedValue)")
-        //self.numberFormatter = numberFormatter
         currencyField = CurrencyUITextField(decimal: value)
     }
 
@@ -30,5 +26,7 @@ struct CurrencyTextField: UIViewRepresentable {
         return currencyField
     }
 
-    func updateUIView(_ uiView: CurrencyUITextField, context: Context) { }
+    func updateUIView(_ uiView: CurrencyUITextField, context: Context) {
+        Self.logger.trace("updateUIView")
+    }
 }
