@@ -15,4 +15,11 @@ extension Formatter {
         formatter.maximumFractionDigits = 2
         return formatter
     }()
+    
+    static let decimal: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 0
+        return formatter
+    }()
 }

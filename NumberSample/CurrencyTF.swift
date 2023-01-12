@@ -13,7 +13,7 @@ import UIKit
 struct CurrencyTF: UIViewRepresentable {
     typealias UIViewType = TerminalTF
     @Binding var value: Decimal
-    @State var text: String
+    @State private var text: String
     private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!,
                                        category: String(describing: CurrencyTF.self))
         
@@ -68,7 +68,7 @@ struct CurrencyTF: UIViewRepresentable {
                     text = String(t.dropLast())
                 }
             }
-            return false
+            return false //swiftui updates uiTextField.text in updateUiView
         }
     }
 }

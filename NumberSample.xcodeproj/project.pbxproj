@@ -107,9 +107,11 @@
 			children = (
 				14B77542272AD8D9008083A8 /* NumberSampleApp.swift */,
 				14B77544272AD8D9008083A8 /* ContentView.swift */,
+				6FF1EDD727B5061B009835B0 /* TerminalTF.swift */,
 				AF880394296F3C7E00FE5880 /* CustomUiTF.swift */,
 				AF880396296F42CB00FE5880 /* DecimalTF.swift */,
-				AF880393296F3C5F00FE5880 /* CurrencyTF */,
+				6FF1EDD927B50632009835B0 /* CurrencyTF.swift */,
+				AF88039829707A4700FE5880 /* Formatter+.swift */,
 				14B77546272AD8DA008083A8 /* Assets.xcassets */,
 				14B7754B272AD8DA008083A8 /* Info.plist */,
 				14B77548272AD8DA008083A8 /* Preview Content */,
@@ -141,16 +143,6 @@
 				14B77561272AD8DA008083A8 /* Info.plist */,
 			);
 			path = NumberSampleUITests;
-			sourceTree = "<group>";
-		};
-		AF880393296F3C5F00FE5880 /* CurrencyTF */ = {
-			isa = PBXGroup;
-			children = (
-				6FF1EDD727B5061B009835B0 /* TerminalTF.swift */,
-				6FF1EDD927B50632009835B0 /* CurrencyTF.swift */,
-				AF88039829707A4700FE5880 /* Formatter+.swift */,
-			);
-			path = CurrencyTF;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

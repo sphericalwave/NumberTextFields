@@ -12,91 +12,66 @@ import SwiftUI
 struct DecimalTF: UIViewRepresentable {
     @State private var text: String
     @Binding var decimal: Decimal
-    private let formatter: NumberFormatter
-    typealias UIViewType = DecimalUiTF
+    typealias UIViewType = TerminalTF
     private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!,
                                        category: String(describing: DecimalTF.self))
     
     init(decimal: Binding<Decimal>) {
         self._decimal = decimal
-        self.text = decimal.wrappedValue.description //TODO:
-        
-        //if this is being rebuilt all the time this is a performance hit
-        let nmbrFrmt = NumberFormatter()
-        nmbrFrmt.numberStyle = .currency
-        nmbrFrmt.maximumFractionDigits = 2
-        self.formatter = nmbrFrmt
+        self.text = Formatter.decimal.string(for: decimal.wrappedValue) ?? ""
     }
     
-    func makeUIView(context: Context) -> DecimalUiTF {
+    func makeUIView(context: Context) -> TerminalTF {
         Self.logger.trace("makeUIView(context: Context)")
-        let tf = DecimalUiTF(text: text)
-        tf.borderStyle = .roundedRect
+        let tf = TerminalTF()
         tf.delegate = context.coordinator
         return tf
     }
     
-    func updateUIView(_ uiView: DecimalUiTF, context: Context) {
+    func updateUIView(_ uiView: TerminalTF, context: Context) {
         Self.logger.trace("updateUIView")
-        uiView.text = text
+        
+        let removeFrmt = text.filter (\.isWholeNumber)
+        let decimal = Decimal(string: removeFrmt) ?? 0
+        let frmtText = Formatter.decimal.string(for: decimal) ?? ""
+        Self.logger.trace("updateUIView text: \(text) decimal: \(decimal)  frmtText \(frmtText)")
+        
+        //update uikit
+        uiView.text = frmtText
+        
+        //update swiftUi
+        DispatchQueue.main.async {
+            self.decimal = decimal
+        }
     }
     
     func makeCoordinator() -> Coordinator {
         Self.logger.trace("makeCoordinator()")
-        return Coordinator(text: $text, decimal: $decimal, formatter: formatter)
+        return Coordinator(text: $text)
     }
     
     class Coordinator: NSObject, UITextFieldDelegate {
         private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!,
                                            category: String(describing: DecimalTF.Coordinator.self))
-        @Binding var text: String //updates parent
-        @Binding var decimal: Decimal //updates swiftui
-        private let formatter: NumberFormatter //TODO: there are two formatters
+        @Binding var text: String
         
-        init(text: Binding<String>, decimal: Binding<Decimal>, formatter: NumberFormatter) {
+        init(text: Binding<String>) {
             Self.logger.trace("init(text: Binding<String>)")
             self._text = text
-            self._decimal = decimal
-            self.formatter = formatter
         }
         
-        func textFieldDidChangeSelection(_ textField: UITextField) {
-            Self.logger.trace("textFieldDidChangeSelection")
-            text = textField.text ?? ""
-            let dec = Decimal(string:(textField.text ?? "")) ?? 0
-            decimal = dec
+        func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+            if string != "" {
+                Self.logger.trace("add digit")
+                text = textField.text?.appending(string) ?? ""
+            }
+            else { //backspace case
+                Self.logger.trace("remove digit")
+                if let t = textField.text {
+                    text = String(t.dropLast())
+                }
+            }
+            return false //swiftui updates uiTextField.text in updateUiView
         }
-    }
-}
-
-import UIKit
-
-class DecimalUiTF: UITextField {
-    
-    private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!,
-                                       category: String(describing: DecimalUiTF.self))
-    
-    init(text: String) {
-        Self.logger.trace("init(text: String)")
-        super.init(frame: .zero)
-        self.font =  UIFont.systemFont(ofSize: 17, weight: .regular) //TODO: match font
-        self.keyboardType = .numberPad
-        self.textAlignment = .right
-        self.borderStyle = .roundedRect
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    //prevent user from moving the cursor
-    override func closestPosition(to point: CGPoint) -> UITextPosition? {
-        return self.endOfDocument
-    }
-    
-    //prevent user from moving cursor with copy paster ui
-    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        //editingChanged()
-        return !isFirstResponder
     }
 }
