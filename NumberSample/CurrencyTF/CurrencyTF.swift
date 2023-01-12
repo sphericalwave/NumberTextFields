@@ -21,13 +21,15 @@ struct CurrencyTF: UIViewRepresentable {
     
     //FIXME: this is being rebuilt whenever the value of TF ∆s
     init(value: Binding<Decimal>) {
-        Self.logger.trace("init \(value.wrappedValue)")
+        
         let nmbrFrmt = NumberFormatter()
         nmbrFrmt.numberStyle = .currency
         nmbrFrmt.maximumFractionDigits = 2
         self.formatter = nmbrFrmt
         self._value = value
-        self.text = nmbrFrmt.string(for: value.wrappedValue) ?? ""
+        let t = nmbrFrmt.string(for: value.wrappedValue) ?? ""
+        Self.logger.trace("init val: \(value.wrappedValue), text: \(t)")
+        self.text = t
     }
     
     func makeUIView(context: Context) -> TerminalTF {
@@ -38,11 +40,15 @@ struct CurrencyTF: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: TerminalTF, context: Context) {
-        Self.logger.trace("updateUIView")
         let removeFrmt = text.filter (\.isWholeNumber)
         let decimal = Decimal(string: removeFrmt) ?? 0
         let shiftedDecimal = decimal / pow(10, formatter.maximumFractionDigits)
-        uiView.text = formatter.string(for: shiftedDecimal)
+        DispatchQueue.main.async {
+            self.value = shiftedDecimal //TODO: skeptical about this ask JC
+        }
+        let frmtText = formatter.string(for: shiftedDecimal) ?? ""
+        Self.logger.trace("updateUIView text: \(text) shiftedDecimal: \(shiftedDecimal)  frmtText \(frmtText)")
+        uiView.text = frmtText
     }
     
     func makeCoordinator() -> Coordinator {
@@ -81,7 +87,7 @@ struct CurrencyTF: UIViewRepresentable {
 //                let appendChar = removeFrmt.appending(string)
 //                let decimal = Decimal(string: appendChar) ?? 0
 //                let shiftedDecimal = decimal / pow(10, formatter.maximumFractionDigits)
-//                self.value = shiftedDecimal
+                //self.value = shiftedDecimal
             }
             else {
                 Self.logger.trace("remove digit")
@@ -92,10 +98,11 @@ struct CurrencyTF: UIViewRepresentable {
 //                    let removeLeastChar = String(removeFrmt.dropLast())
 //                    let decimal = Decimal(string: removeLeastChar) ?? 0
 //                    let shiftedDecimal = decimal / pow(10, formatter.maximumFractionDigits)
-//                    self.value = shiftedDecimal
+                    //self.value = shiftedDecimal
                 }
                 else {
                     text = ""
+                    //value = 0
                 }
             }
             return false
