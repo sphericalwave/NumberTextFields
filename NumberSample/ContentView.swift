@@ -11,7 +11,7 @@ import os
 
 struct ContentView: View {
     @State private var isSubtitleHidden = false
-    @State private var value: Decimal = 10
+    @State private var value: Decimal? = 10
     
     private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!,
                                        category: String(describing: ContentView.self))
@@ -19,9 +19,9 @@ struct ContentView: View {
     var body: some View {
         List {
             
-//            Section {
-//                currency
-//            }
+            Section {
+                currency
+            }
             
             //basicTF
             
@@ -40,7 +40,7 @@ struct ContentView: View {
             HStack {
                 Text("decimal")
                 Spacer()
-                Text(value.description)
+                Text(value?.description ?? "nil")
             }
             
             HStack {

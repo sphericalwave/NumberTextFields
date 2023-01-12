@@ -37,7 +37,6 @@ struct IntegerTF: UIViewRepresentable {
             let frmtText = Formatter.decimal.string(for: decimal)
             Self.logger.trace("updateUIView text: \(text) decimal: \(decimal)  frmtText \(frmtText ?? "nil")")
             
-            //update uikit
             uiView.text = frmtText
         }
         else {
@@ -65,13 +64,13 @@ struct IntegerTF: UIViewRepresentable {
         func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
             if string != "" {
                 Self.logger.trace("add digit")
-                self.text = textField.text?.appending(string) ?? ""
+                self.text = textField.text?.appending(string) ?? "" //prevents SwiftUi inits?
                 self.int = int(text: text)
             }
             else { //backspace case
                 Self.logger.trace("remove digit")
                 if let t = textField.text {
-                    self.text = String(t.dropLast())
+                    self.text = String(t.dropLast()) //prevents SwiftUi inits?
                     self.int = int(text: text)
                 }
             }

@@ -12,15 +12,17 @@ import UIKit
 
 struct CurrencyTF: UIViewRepresentable {
     typealias UIViewType = TerminalTF
-    @Binding var value: Decimal
+    @Binding var value: Decimal?
     @State private var text: String
     private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!,
                                        category: String(describing: CurrencyTF.self))
         
-    init(value: Binding<Decimal>) {
+    init(value: Binding<Decimal?>) {
         self._value = value
         let t = Formatter.currency.string(for: value.wrappedValue) ?? ""
-        Self.logger.trace("init val: \(value.wrappedValue), text: \(t)")
+        //Self.logger.trace("init val: \(value.wrappedValue ?? "nil"), text: \(t)")
+        Self.logger.trace("init val: ")
+
         self.text = t
     }
     
@@ -32,43 +34,52 @@ struct CurrencyTF: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: TerminalTF, context: Context) {
-        let removeFrmt = text.filter (\.isWholeNumber)
-        let decimal = Decimal(string: removeFrmt) ?? 0
-        let shiftedDecimal = decimal / pow(10, Formatter.currency.maximumFractionDigits)
-        DispatchQueue.main.async {
-            self.value = shiftedDecimal //TODO: skeptical about this ask JC
+        Self.logger.trace("updateUIView")
+        if let decimal = value {
+            let frmtText = Formatter.currency.string(for: decimal) ?? ""
+            uiView.text = frmtText
         }
-        let frmtText = Formatter.currency.string(for: shiftedDecimal) ?? ""
-        Self.logger.trace("updateUIView text: \(text) shiftedDecimal: \(shiftedDecimal)  frmtText \(frmtText)")
-        uiView.text = frmtText
+        else {
+            let frmtText = Formatter.currency.string(for: 0) ?? ""
+            uiView.text = frmtText
+        }
     }
     
     func makeCoordinator() -> Coordinator {
-        Coordinator(text: $text)
+        Coordinator(decimal: $value)
     }
     
     class Coordinator: NSObject, UITextFieldDelegate {
         private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!,
                                            category: String(describing: Coordinator.self))
-        @Binding var text: String
+        @Binding var decimal: Decimal?
 
-        init(text: Binding<String>) {
+        init(decimal: Binding<Decimal?>) {
             Self.logger.trace("init")
-            self._text = text
+            self._decimal = decimal
         }
         
         func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
             if string != "" {
                 Self.logger.trace("add digit")
-                text = textField.text?.appending(string) ?? ""
+                let text = textField.text?.appending(string) ?? ""
+                self.decimal = decimal(text: text)
             }
             else { //backspace case
                 Self.logger.trace("remove digit")
                 if let t = textField.text {
-                    text = String(t.dropLast())
+                    let text = String(t.dropLast())
+                    self.decimal = decimal(text: text)
                 }
             }
             return false //swiftui updates uiTextField.text in updateUiView
+        }
+        
+        func decimal(text: String) -> Decimal? {
+            let removeFrmt = text.filter (\.isWholeNumber)
+            let decimal = Decimal(string: removeFrmt) ?? 0
+            let shiftedDecimal = decimal / pow(10, Formatter.currency.maximumFractionDigits)
+            return shiftedDecimal
         }
     }
 }
