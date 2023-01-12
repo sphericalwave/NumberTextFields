@@ -17,46 +17,97 @@ struct ContentView: View {
                                        category: String(describing: ContentView.self))
     
     var body: some View {
-        VStack(spacing: 20) {
+        List {
             
-            Text("Send money")
+//            Section {
+//                currency
+//            }
+            
+            //basicTF
+            
+            Section {
+                decimalFields
+            }
+        }
+    }
+    
+    var currency: some View {
+        VStack {
+            
+            Text("CurrencyTF")
                 .font(.title)
             
-            Text(value.description)
-            
-            TextField(".number", value: $value, format: .number)
-                .keyboardType(.decimalPad)
-            
-            CurrencyTextField(value: $value)
-                .padding(20)
-                .overlay(RoundedRectangle(cornerRadius: 16)
-                            .stroke(Color.gray.opacity(0.3), lineWidth: 2))
-                .frame(height: 100)
-            
-            Rectangle()
-                .frame(width: 0, height: 40)
-            
-            Text("Send")
-                .fontWeight(.bold)
-                .padding(30)
-                .frame(width: 180, height: 50)
-                .background(Color.yellow)
-                .cornerRadius(20)
-                .onTapGesture {
-                    if !isSubtitleHidden {
-                        isSubtitleHidden.toggle()
-                    }
-                }
-                
-                
-            if isSubtitleHidden {
-                Text("Sending \(value.description)")
+            HStack {
+                Text("decimal")
+                Spacer()
+                Text(value.description)
             }
             
-            Spacer()
+            HStack {
+                Text("swiftUi")
+                Spacer()
+                TextField(".number", value: $value, format: .number)
+                    .keyboardType(.decimalPad)
+            }
+            
+            HStack {
+                Text("uiKit")
+                Spacer()
+                CurrencyTF(value: $value)
+            }
         }
-        .padding(.top, 60)
-        .padding(.horizontal, 20)
+    }
+    
+    @State var decimal: Int?
+    var decimalFields: some View {
+        VStack {
+            
+            HStack {
+                Text("decimal")
+                Spacer()
+                Text(decimal?.description ?? "nil")
+            }
+            
+            HStack {
+                Text("swiftUI")
+                Spacer()
+                TextField("test", value: $decimal, format: .number)
+                    .textFieldStyle(.roundedBorder)
+                    .keyboardType(.numberPad)
+            }
+            
+            HStack {
+                Text("uiKit")
+                Spacer()
+                IntegerTF(int: $decimal)
+            }
+        }
+    }
+    
+    @State var text = "CustomTF Test"
+    var basicTF: some View {
+        
+        VStack {
+            
+            HStack {
+                Text("text")
+                Spacer()
+                Text(text)
+            }
+            
+            HStack {
+                Text("swiftUI")
+                Spacer()
+                TextField("test", text: $text)
+                    .textFieldStyle(.roundedBorder)
+            }
+            
+            HStack {
+                Text("uiKit")
+                Spacer()
+                CustomTF(text: $text)
+            }
+        }
     }
 }
 
