@@ -10,16 +10,17 @@ import UIKit
 import SwiftUI
 import os
 
-class CurrencyUITextField: UITextField {
-    var decimal: Decimal
-    private let formatter: NumberFormatter
+
+class TerminalTF: UITextField {
+    //var decimal: Decimal
+    //private let formatter: NumberFormatter
     private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!,
-                                       category: String(describing: CurrencyUITextField.self))
+                                       category: String(describing: TerminalTF.self))
     
-    init(decimal: Decimal, formatter: NumberFormatter) {
-        Self.logger.trace("init \(decimal)")
-        self.formatter = formatter
-        self.decimal = decimal
+    init() {
+        Self.logger.trace("init")
+        //self.formatter = formatter
+        //self.decimal = decimal
         super.init(frame: .zero)
         self.font =  UIFont.systemFont(ofSize: 17, weight: .regular) //TODO: match font
         self.keyboardType = .numberPad

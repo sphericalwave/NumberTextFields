@@ -11,8 +11,7 @@ import os
 import UIKit
 
 struct CurrencyTF: UIViewRepresentable {
-    
-    typealias UIViewType = CurrencyUITextField
+    typealias UIViewType = TerminalTF
     @Binding var value: Decimal
     @State var text: String
     private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!,
@@ -20,30 +19,25 @@ struct CurrencyTF: UIViewRepresentable {
     
     private let formatter: NumberFormatter
     
+    //FIXME: this is being rebuilt whenever the value of TF ∆s
     init(value: Binding<Decimal>) {
         Self.logger.trace("init \(value.wrappedValue)")
-        self._value = value
-        
-        //FIXME: this is being rebuilt whenever the value of TF ∆s
         let nmbrFrmt = NumberFormatter()
         nmbrFrmt.numberStyle = .currency
         nmbrFrmt.maximumFractionDigits = 2
         self.formatter = nmbrFrmt
-       // self.text = nmbrFrmt.string(for: value.wrappedValue) ?? ""
-        self.text = nmbrFrmt.string(for: value) ?? ""
-
+        self._value = value
+        self.text = nmbrFrmt.string(for: value.wrappedValue) ?? ""
     }
     
-    func makeUIView(context: Context) -> CurrencyUITextField {
+    func makeUIView(context: Context) -> TerminalTF {
         Self.logger.trace("makeUIView")
-        let currencyField = CurrencyUITextField(decimal: value, formatter: formatter)
-        currencyField.delegate = context.coordinator
-
-        //currencyField.text = text
-        return currencyField
+        let terminalTF = TerminalTF()
+        terminalTF.delegate = context.coordinator
+        return terminalTF
     }
     
-    func updateUIView(_ uiView: CurrencyUITextField, context: Context) {
+    func updateUIView(_ uiView: TerminalTF, context: Context) {
         Self.logger.trace("updateUIView")
         let removeFrmt = text.filter (\.isWholeNumber)
         let decimal = Decimal(string: removeFrmt) ?? 0
