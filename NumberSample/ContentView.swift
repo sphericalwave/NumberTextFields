@@ -12,7 +12,6 @@ import os
 struct ContentView: View {
     @State private var isSubtitleHidden = false
     @State private var value: Decimal? = 10
-    
     private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!,
                                        category: String(describing: ContentView.self))
     

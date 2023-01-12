@@ -25,7 +25,7 @@ struct IntegerTF: UIViewRepresentable {
         Self.logger.trace("makeUIView(context: Context)")
         let tf = TerminalTF()
         tf.delegate = context.coordinator
-        tf.placeholder = "empty"
+        tf.placeholder = "?"
         tf.accessibilityIdentifier = "IntegerTF"
         return tf
     }

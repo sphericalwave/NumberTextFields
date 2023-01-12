@@ -5,10 +5,8 @@
 //  Created by Benoit Pasquier on 10/2/22.
 //
 
-import Foundation
-import SwiftUI
 import os
-import UIKit
+import SwiftUI
 
 struct CurrencyTF: UIViewRepresentable {
     typealias UIViewType = TerminalTF
@@ -28,7 +26,7 @@ struct CurrencyTF: UIViewRepresentable {
         let tf = TerminalTF()
         tf.delegate = context.coordinator
         tf.placeholder = "$"
-        tf.accessibilityIdentifier = "IntegerTF"
+        tf.accessibilityIdentifier = "CurrencyTF"
         return tf
     }
     
