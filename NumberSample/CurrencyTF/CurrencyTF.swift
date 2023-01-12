@@ -14,6 +14,7 @@ struct CurrencyTF: UIViewRepresentable {
     
     typealias UIViewType = CurrencyUITextField
     @Binding var value: Decimal
+    @State var text: String
     private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!,
                                        category: String(describing: CurrencyTF.self))
     
@@ -28,22 +29,30 @@ struct CurrencyTF: UIViewRepresentable {
         nmbrFrmt.numberStyle = .currency
         nmbrFrmt.maximumFractionDigits = 2
         self.formatter = nmbrFrmt
+       // self.text = nmbrFrmt.string(for: value.wrappedValue) ?? ""
+        self.text = nmbrFrmt.string(for: value) ?? ""
+
     }
     
     func makeUIView(context: Context) -> CurrencyUITextField {
         Self.logger.trace("makeUIView")
         let currencyField = CurrencyUITextField(decimal: value, formatter: formatter)
         currencyField.delegate = context.coordinator
+
+        //currencyField.text = text
         return currencyField
     }
     
     func updateUIView(_ uiView: CurrencyUITextField, context: Context) {
         Self.logger.trace("updateUIView")
-        uiView.text = formatter.string(for: value)
+        let removeFrmt = text.filter (\.isWholeNumber)
+        let decimal = Decimal(string: removeFrmt) ?? 0
+        let shiftedDecimal = decimal / pow(10, formatter.maximumFractionDigits)
+        uiView.text = formatter.string(for: shiftedDecimal)
     }
     
     func makeCoordinator() -> Coordinator {
-        Coordinator(value: $value, formatter: formatter)
+        Coordinator(text: $text, value: $value, formatter: formatter)
     }
     
     class Coordinator: NSObject, UITextFieldDelegate {
@@ -51,11 +60,13 @@ struct CurrencyTF: UIViewRepresentable {
         private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!,
                                            category: String(describing: Coordinator.self))
         
+        @Binding var text: String
         @Binding var value: Decimal
         private let formatter: NumberFormatter
         
-        init(value: Binding<Decimal>, formatter: NumberFormatter) {
+        init(text: Binding<String>, value: Binding<Decimal>, formatter: NumberFormatter) {
             Self.logger.trace("init")
+            self._text = text
             self._value = value
             self.formatter = formatter
         }
@@ -68,32 +79,61 @@ struct CurrencyTF: UIViewRepresentable {
         
         func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
             
-            //backspace
-            guard string != "" else {
-                Self.logger.trace("remove digit")
-                if let text = textField.text {
-                    let removeFrmt = text.filter (\.isWholeNumber)
-                    let removeLeastChar = String(removeFrmt.dropLast())
-                    let decimal = Decimal(string: removeLeastChar) ?? 0
-                    let shiftedDecimal = decimal / pow(10, formatter.maximumFractionDigits)
-                    self.value = shiftedDecimal
-                }
-                return false
-            }
-            
-            //add text
-            if let text = textField.text {
+            if string != "" {
                 Self.logger.trace("add digit")
-                let removeFrmt = text.filter (\.isWholeNumber)
-                let appendChar = removeFrmt.appending(string)
-                let decimal = Decimal(string: appendChar) ?? 0
-                let shiftedDecimal = decimal / pow(10, formatter.maximumFractionDigits)
-                self.value = shiftedDecimal
-                return false
+                text = textField.text?.appending(string) ?? ""
+                //TODO: update SwiftUI decimal
+//                let removeFrmt = text.filter (\.isWholeNumber)
+//                let appendChar = removeFrmt.appending(string)
+//                let decimal = Decimal(string: appendChar) ?? 0
+//                let shiftedDecimal = decimal / pow(10, formatter.maximumFractionDigits)
+//                self.value = shiftedDecimal
             }
-            
-            //unused
+            else {
+                Self.logger.trace("remove digit")
+                if let t = textField.text {
+                    text = String(t.dropLast())
+                    
+//                    let removeFrmt = text.filter (\.isWholeNumber)
+//                    let removeLeastChar = String(removeFrmt.dropLast())
+//                    let decimal = Decimal(string: removeLeastChar) ?? 0
+//                    let shiftedDecimal = decimal / pow(10, formatter.maximumFractionDigits)
+//                    self.value = shiftedDecimal
+                }
+                else {
+                    text = ""
+                }
+            }
             return false
+            
         }
+        //
+        //            //backspace
+        //            guard string != "" else {
+        //                Self.logger.trace("remove digit")
+        //                if let text = textField.text {
+        //                    let removeFrmt = text.filter (\.isWholeNumber)
+        //                    let removeLeastChar = String(removeFrmt.dropLast())
+        //                    let decimal = Decimal(string: removeLeastChar) ?? 0
+        //                    let shiftedDecimal = decimal / pow(10, formatter.maximumFractionDigits)
+        //                    self.value = shiftedDecimal
+        //                }
+        //                return false
+        //            }
+        //
+        //            //add text
+        //            if let text = textField.text {
+        //                Self.logger.trace("add digit")
+        //                let removeFrmt = text.filter (\.isWholeNumber)
+        //                let appendChar = removeFrmt.appending(string)
+        //                let decimal = Decimal(string: appendChar) ?? 0
+        //                let shiftedDecimal = decimal / pow(10, formatter.maximumFractionDigits)
+        //                self.value = shiftedDecimal
+        //                return false
+        //            }
+        //
+        //            //unused
+        //            return false
+        //        }
     }
 }
