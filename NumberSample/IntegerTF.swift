@@ -9,16 +9,16 @@ import os
 
 import SwiftUI
 
-struct DecimalTF: UIViewRepresentable {
+struct IntegerTF: UIViewRepresentable {
     @State private var text: String
-    @Binding var decimal: Decimal?
+    @Binding var int: Int?
     typealias UIViewType = TerminalTF
     private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!,
-                                       category: String(describing: DecimalTF.self))
+                                       category: String(describing: IntegerTF.self))
     
-    init(decimal: Binding<Decimal?>) {
-        self._decimal = decimal
-        self.text = Formatter.decimal.string(for: decimal.wrappedValue) ?? ""
+    init(int: Binding<Int?>) {
+        self._int = int
+        self.text = Formatter.decimal.string(for: int.wrappedValue) ?? ""
     }
     
     func makeUIView(context: Context) -> TerminalTF {
@@ -26,6 +26,7 @@ struct DecimalTF: UIViewRepresentable {
         let tf = TerminalTF()
         tf.delegate = context.coordinator
         tf.placeholder = "empty"
+        tf.accessibilityIdentifier = "IntegerTF"
         return tf
     }
     
@@ -46,7 +47,7 @@ struct DecimalTF: UIViewRepresentable {
         
         //update swiftUi
         DispatchQueue.main.async {
-            self.decimal = decimal
+            self.int = Int(removeFrmt)
         }
     }
     
@@ -57,7 +58,7 @@ struct DecimalTF: UIViewRepresentable {
     
     class Coordinator: NSObject, UITextFieldDelegate {
         private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!,
-                                           category: String(describing: DecimalTF.Coordinator.self))
+                                           category: String(describing: IntegerTF.Coordinator.self))
         @Binding var text: String
         
         init(text: Binding<String>) {

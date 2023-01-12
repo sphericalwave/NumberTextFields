@@ -58,7 +58,7 @@ struct ContentView: View {
         }
     }
     
-    @State var decimal: Decimal?
+    @State var decimal: Int?
     var decimalFields: some View {
         VStack {
             
@@ -79,7 +79,7 @@ struct ContentView: View {
             HStack {
                 Text("uiKit")
                 Spacer()
-                DecimalTF(decimal: $decimal)
+                IntegerTF(int: $decimal)
             }
         }
     }
