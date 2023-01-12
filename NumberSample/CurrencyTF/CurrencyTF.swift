@@ -16,18 +16,10 @@ struct CurrencyTF: UIViewRepresentable {
     @State var text: String
     private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!,
                                        category: String(describing: CurrencyTF.self))
-    
-    private let formatter: NumberFormatter
-    
-    //FIXME: this is being rebuilt whenever the value of TF ∆s
-    init(value: Binding<Decimal>) {
         
-        let nmbrFrmt = NumberFormatter()
-        nmbrFrmt.numberStyle = .currency
-        nmbrFrmt.maximumFractionDigits = 2
-        self.formatter = nmbrFrmt
+    init(value: Binding<Decimal>) {
         self._value = value
-        let t = nmbrFrmt.string(for: value.wrappedValue) ?? ""
+        let t = Formatter.currency.string(for: value.wrappedValue) ?? ""
         Self.logger.trace("init val: \(value.wrappedValue), text: \(t)")
         self.text = t
     }
@@ -42,99 +34,41 @@ struct CurrencyTF: UIViewRepresentable {
     func updateUIView(_ uiView: TerminalTF, context: Context) {
         let removeFrmt = text.filter (\.isWholeNumber)
         let decimal = Decimal(string: removeFrmt) ?? 0
-        let shiftedDecimal = decimal / pow(10, formatter.maximumFractionDigits)
+        let shiftedDecimal = decimal / pow(10, Formatter.currency.maximumFractionDigits)
         DispatchQueue.main.async {
             self.value = shiftedDecimal //TODO: skeptical about this ask JC
         }
-        let frmtText = formatter.string(for: shiftedDecimal) ?? ""
+        let frmtText = Formatter.currency.string(for: shiftedDecimal) ?? ""
         Self.logger.trace("updateUIView text: \(text) shiftedDecimal: \(shiftedDecimal)  frmtText \(frmtText)")
         uiView.text = frmtText
     }
     
     func makeCoordinator() -> Coordinator {
-        Coordinator(text: $text, value: $value, formatter: formatter)
+        Coordinator(text: $text)
     }
     
     class Coordinator: NSObject, UITextFieldDelegate {
-        
         private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!,
                                            category: String(describing: Coordinator.self))
-        
         @Binding var text: String
-        @Binding var value: Decimal
-        private let formatter: NumberFormatter
-        
-        init(text: Binding<String>, value: Binding<Decimal>, formatter: NumberFormatter) {
+
+        init(text: Binding<String>) {
             Self.logger.trace("init")
             self._text = text
-            self._value = value
-            self.formatter = formatter
-        }
-        
-        //keep cursor all the way to the right
-        func textFieldDidBeginEditing(_ textField: UITextField) {
-            Self.logger.trace("move cursor to right")
-            textField.selectedTextRange = textField.textRange(from: textField.endOfDocument, to: textField.endOfDocument)
         }
         
         func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-            
             if string != "" {
                 Self.logger.trace("add digit")
                 text = textField.text?.appending(string) ?? ""
-                //TODO: update SwiftUI decimal
-//                let removeFrmt = text.filter (\.isWholeNumber)
-//                let appendChar = removeFrmt.appending(string)
-//                let decimal = Decimal(string: appendChar) ?? 0
-//                let shiftedDecimal = decimal / pow(10, formatter.maximumFractionDigits)
-                //self.value = shiftedDecimal
             }
-            else {
+            else { //backspace case
                 Self.logger.trace("remove digit")
                 if let t = textField.text {
                     text = String(t.dropLast())
-                    
-//                    let removeFrmt = text.filter (\.isWholeNumber)
-//                    let removeLeastChar = String(removeFrmt.dropLast())
-//                    let decimal = Decimal(string: removeLeastChar) ?? 0
-//                    let shiftedDecimal = decimal / pow(10, formatter.maximumFractionDigits)
-                    //self.value = shiftedDecimal
-                }
-                else {
-                    text = ""
-                    //value = 0
                 }
             }
             return false
-            
         }
-        //
-        //            //backspace
-        //            guard string != "" else {
-        //                Self.logger.trace("remove digit")
-        //                if let text = textField.text {
-        //                    let removeFrmt = text.filter (\.isWholeNumber)
-        //                    let removeLeastChar = String(removeFrmt.dropLast())
-        //                    let decimal = Decimal(string: removeLeastChar) ?? 0
-        //                    let shiftedDecimal = decimal / pow(10, formatter.maximumFractionDigits)
-        //                    self.value = shiftedDecimal
-        //                }
-        //                return false
-        //            }
-        //
-        //            //add text
-        //            if let text = textField.text {
-        //                Self.logger.trace("add digit")
-        //                let removeFrmt = text.filter (\.isWholeNumber)
-        //                let appendChar = removeFrmt.appending(string)
-        //                let decimal = Decimal(string: appendChar) ?? 0
-        //                let shiftedDecimal = decimal / pow(10, formatter.maximumFractionDigits)
-        //                self.value = shiftedDecimal
-        //                return false
-        //            }
-        //
-        //            //unused
-        //            return false
-        //        }
     }
 }

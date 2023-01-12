@@ -17,6 +17,7 @@
 		6FF1EDDA27B50632009835B0 /* CurrencyTF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FF1EDD927B50632009835B0 /* CurrencyTF.swift */; };
 		AF880395296F3C7F00FE5880 /* CustomUiTF.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF880394296F3C7E00FE5880 /* CustomUiTF.swift */; };
 		AF880397296F42CB00FE5880 /* DecimalTF.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF880396296F42CB00FE5880 /* DecimalTF.swift */; };
+		AF88039929707A4700FE5880 /* Formatter+.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF88039829707A4700FE5880 /* Formatter+.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		6FF1EDD927B50632009835B0 /* CurrencyTF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyTF.swift; sourceTree = "<group>"; };
 		AF880394296F3C7E00FE5880 /* CustomUiTF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomUiTF.swift; sourceTree = "<group>"; };
 		AF880396296F42CB00FE5880 /* DecimalTF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecimalTF.swift; sourceTree = "<group>"; };
+		AF88039829707A4700FE5880 /* Formatter+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Formatter+.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +148,7 @@
 			children = (
 				6FF1EDD727B5061B009835B0 /* TerminalTF.swift */,
 				6FF1EDD927B50632009835B0 /* CurrencyTF.swift */,
+				AF88039829707A4700FE5880 /* Formatter+.swift */,
 			);
 			path = CurrencyTF;
 			sourceTree = "<group>";
@@ -281,6 +284,7 @@
 			files = (
 				14B77545272AD8D9008083A8 /* ContentView.swift in Sources */,
 				AF880395296F3C7F00FE5880 /* CustomUiTF.swift in Sources */,
+				AF88039929707A4700FE5880 /* Formatter+.swift in Sources */,
 				14B77543272AD8D9008083A8 /* NumberSampleApp.swift in Sources */,
 				6FF1EDDA27B50632009835B0 /* CurrencyTF.swift in Sources */,
 				6FF1EDD827B5061B009835B0 /* TerminalTF.swift in Sources */,

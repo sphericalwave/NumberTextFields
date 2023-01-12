@@ -10,17 +10,11 @@ import UIKit
 import SwiftUI
 import os
 
-
 class TerminalTF: UITextField {
-    //var decimal: Decimal
-    //private let formatter: NumberFormatter
     private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!,
                                        category: String(describing: TerminalTF.self))
-    
     init() {
         Self.logger.trace("init")
-        //self.formatter = formatter
-        //self.decimal = decimal
         super.init(frame: .zero)
         self.font =  UIFont.systemFont(ofSize: 17, weight: .regular) //TODO: match font
         self.keyboardType = .numberPad
@@ -33,6 +27,7 @@ class TerminalTF: UITextField {
     }
     
     //prevent user from moving the cursor
+    //keep cursor all the way to the right
     override func closestPosition(to point: CGPoint) -> UITextPosition? {
         return self.endOfDocument
     }
