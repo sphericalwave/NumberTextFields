@@ -58,14 +58,14 @@ struct ContentView: View {
         }
     }
     
-    @State var decimal: Decimal = 1
+    @State var decimal: Decimal?
     var decimalFields: some View {
         VStack {
             
             HStack {
                 Text("decimal")
                 Spacer()
-                Text(decimal.description)
+                Text(decimal?.description ?? "nil")
             }
             
             HStack {

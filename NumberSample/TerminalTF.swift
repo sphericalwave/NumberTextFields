@@ -16,7 +16,7 @@ class TerminalTF: UITextField {
     init() {
         Self.logger.trace("init")
         super.init(frame: .zero)
-        self.font =  UIFont.systemFont(ofSize: 17, weight: .regular) //TODO: match font
+        self.font =  UIFont.systemFont(ofSize: 15, weight: .regular) //TODO: match font
         self.keyboardType = .numberPad
         self.textAlignment = .right
         self.borderStyle = .roundedRect

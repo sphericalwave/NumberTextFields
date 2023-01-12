@@ -11,12 +11,12 @@ import SwiftUI
 
 struct DecimalTF: UIViewRepresentable {
     @State private var text: String
-    @Binding var decimal: Decimal
+    @Binding var decimal: Decimal?
     typealias UIViewType = TerminalTF
     private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!,
                                        category: String(describing: DecimalTF.self))
     
-    init(decimal: Binding<Decimal>) {
+    init(decimal: Binding<Decimal?>) {
         self._decimal = decimal
         self.text = Formatter.decimal.string(for: decimal.wrappedValue) ?? ""
     }
@@ -25,6 +25,7 @@ struct DecimalTF: UIViewRepresentable {
         Self.logger.trace("makeUIView(context: Context)")
         let tf = TerminalTF()
         tf.delegate = context.coordinator
+        tf.placeholder = "empty"
         return tf
     }
     
@@ -32,12 +33,16 @@ struct DecimalTF: UIViewRepresentable {
         Self.logger.trace("updateUIView")
         
         let removeFrmt = text.filter (\.isWholeNumber)
-        let decimal = Decimal(string: removeFrmt) ?? 0
-        let frmtText = Formatter.decimal.string(for: decimal) ?? ""
-        Self.logger.trace("updateUIView text: \(text) decimal: \(decimal)  frmtText \(frmtText)")
-        
-        //update uikit
-        uiView.text = frmtText
+        if let decimal = Decimal(string: removeFrmt) {
+            let frmtText = Formatter.decimal.string(for: decimal)
+            Self.logger.trace("updateUIView text: \(text) decimal: \(decimal)  frmtText \(frmtText ?? "nil")")
+            
+            //update uikit
+            uiView.text = frmtText
+        }
+        else {
+            uiView.text = nil
+        }
         
         //update swiftUi
         DispatchQueue.main.async {
