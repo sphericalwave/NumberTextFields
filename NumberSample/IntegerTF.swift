@@ -31,17 +31,7 @@ struct IntegerTF: UIViewRepresentable {
     
     func updateUIView(_ uiView: TerminalTF, context: Context) {
         Self.logger.trace("updateUIView")
-        
-        let removeFrmt = text.filter (\.isWholeNumber)
-        if let decimal = Decimal(string: removeFrmt) {
-            let frmtText = Formatter.decimal.string(for: decimal)
-            Self.logger.trace("updateUIView text: \(text) decimal: \(decimal)  frmtText \(frmtText ?? "nil")")
-            
-            uiView.text = frmtText
-        }
-        else {
-            uiView.text = nil
-        }
+        uiView.text = text
     }
     
     func makeCoordinator() -> Coordinator {
@@ -64,14 +54,17 @@ struct IntegerTF: UIViewRepresentable {
         func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
             if string != "" {
                 Self.logger.trace("add digit")
-                self.text = textField.text?.appending(string) ?? "" //prevents SwiftUi inits?
-                self.int = int(text: text)
+                let newText = textField.text?.appending(string) ?? "" //prevents SwiftUi inits?
+                self.int = int(text: newText)
+                self.text = Formatter.decimal.string(for: int) ?? ""
+
             }
             else { //backspace case
                 Self.logger.trace("remove digit")
                 if let t = textField.text {
-                    self.text = String(t.dropLast()) //prevents SwiftUi inits?
-                    self.int = int(text: text)
+                    let newText = String(t.dropLast()) //prevents SwiftUi inits?
+                    self.int = int(text: newText)
+                    self.text = Formatter.decimal.string(for: int) ?? ""
                 }
             }
             return false //swiftui updates uiTextField.text in updateUiView

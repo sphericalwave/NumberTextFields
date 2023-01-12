@@ -19,9 +19,9 @@ struct ContentView: View {
     var body: some View {
         List {
             
-            Section {
-                currency
-            }
+//            Section {
+//                currency
+//            }
             
             //basicTF
             
