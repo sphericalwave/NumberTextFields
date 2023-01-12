@@ -9,13 +9,14 @@ import os
 import SwiftUI
 
 struct IntegerTF: UIViewRepresentable {
-    @State private var text: String
-    @Binding var int: Int?
     typealias UIViewType = TerminalTF
+    @Binding var int: Int?
+    @State private var text: String
     private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!,
                                        category: String(describing: IntegerTF.self))
     
     init(int: Binding<Int?>) {
+        Self.logger.trace("init")
         self._int = int
         self.text = Formatter.decimal.string(for: int.wrappedValue) ?? ""
     }

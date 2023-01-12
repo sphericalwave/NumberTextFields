@@ -18,58 +18,55 @@ struct CurrencyTF: UIViewRepresentable {
                                        category: String(describing: CurrencyTF.self))
         
     init(value: Binding<Decimal?>) {
+        Self.logger.trace("init")
         self._value = value
-        let t = Formatter.currency.string(for: value.wrappedValue) ?? ""
-        //Self.logger.trace("init val: \(value.wrappedValue ?? "nil"), text: \(t)")
-        Self.logger.trace("init val: ")
-
-        self.text = t
+        self.text = Formatter.currency.string(for: value.wrappedValue) ?? ""
     }
     
     func makeUIView(context: Context) -> TerminalTF {
         Self.logger.trace("makeUIView")
-        let terminalTF = TerminalTF()
-        terminalTF.delegate = context.coordinator
-        return terminalTF
+        let tf = TerminalTF()
+        tf.delegate = context.coordinator
+        tf.placeholder = "$"
+        tf.accessibilityIdentifier = "IntegerTF"
+        return tf
     }
     
     func updateUIView(_ uiView: TerminalTF, context: Context) {
         Self.logger.trace("updateUIView")
-        if let decimal = value {
-            let frmtText = Formatter.currency.string(for: decimal) ?? ""
-            uiView.text = frmtText
-        }
-        else {
-            let frmtText = Formatter.currency.string(for: 0) ?? ""
-            uiView.text = frmtText
-        }
+        uiView.text = text
     }
     
     func makeCoordinator() -> Coordinator {
-        Coordinator(decimal: $value)
+        Self.logger.trace("makeCoordinator()")
+        return Coordinator(text: $text, decimal: $value)
     }
     
     class Coordinator: NSObject, UITextFieldDelegate {
         private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!,
                                            category: String(describing: Coordinator.self))
+        @Binding var text: String
         @Binding var decimal: Decimal?
 
-        init(decimal: Binding<Decimal?>) {
+        init(text: Binding<String>, decimal: Binding<Decimal?>) {
             Self.logger.trace("init")
+            self._text = text
             self._decimal = decimal
         }
         
         func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
             if string != "" {
                 Self.logger.trace("add digit")
-                let text = textField.text?.appending(string) ?? ""
-                self.decimal = decimal(text: text)
+                let newText = textField.text?.appending(string) ?? ""
+                self.decimal = decimal(text: newText)
+                self.text = Formatter.currency.string(for: decimal) ?? ""
             }
             else { //backspace case
                 Self.logger.trace("remove digit")
                 if let t = textField.text {
-                    let text = String(t.dropLast())
-                    self.decimal = decimal(text: text)
+                    let newText = String(t.dropLast())
+                    self.decimal = decimal(text: newText)
+                    self.text = Formatter.currency.string(for: decimal) ?? ""
                 }
             }
             return false //swiftui updates uiTextField.text in updateUiView
