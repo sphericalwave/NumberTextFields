@@ -63,7 +63,7 @@ struct DecimalTF: UIViewRepresentable {
         func textFieldDidChangeSelection(_ textField: UITextField) {
             Self.logger.trace("textFieldDidChangeSelection")
             text = textField.text ?? ""
-            let dec = (textField.text ?? "").decimal /// pow(10, formatter.maximumFractionDigits)
+            let dec = Decimal(string:(textField.text ?? "")) ?? 0
             decimal = dec
         }
     }

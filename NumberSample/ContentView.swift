@@ -19,55 +19,43 @@ struct ContentView: View {
     var body: some View {
         List {
             
-            currency
+            Section {
+                currency
+            }
             
             //basicTF
             
-            //decimalFields
+//            Section {
+//                decimalFields
+//            }
         }
     }
     
     var currency: some View {
-        VStack(spacing: 20) {
+        VStack {
             
-            Text("Send money")
+            Text("CurrencyTF")
                 .font(.title)
             
-            Text(value.description)
-            
-            TextField(".number", value: $value, format: .number)
-                .keyboardType(.decimalPad)
-            
-            CurrencyTF(value: $value)
-                .padding(20)
-                .overlay(RoundedRectangle(cornerRadius: 16)
-                    .stroke(Color.gray.opacity(0.3), lineWidth: 2))
-                .frame(height: 100)
-            
-            Rectangle()
-                .frame(width: 0, height: 40)
-            
-            Text("Send")
-                .fontWeight(.bold)
-                .padding(30)
-                .frame(width: 180, height: 50)
-                .background(Color.yellow)
-                .cornerRadius(20)
-                .onTapGesture {
-                    if !isSubtitleHidden {
-                        isSubtitleHidden.toggle()
-                    }
-                }
-            
-            
-            if isSubtitleHidden {
-                Text("Sending \(value.description)")
+            HStack {
+                Text("decimal")
+                Spacer()
+                Text(value.description)
             }
             
-            Spacer()
+            HStack {
+                Text("swiftUi")
+                Spacer()
+                TextField(".number", value: $value, format: .number)
+                    .keyboardType(.decimalPad)
+            }
+            
+            HStack {
+                Text("uiKit")
+                Spacer()
+                CurrencyTF(value: $value)
+            }
         }
-        .padding(.top, 60)
-        .padding(.horizontal, 20)
     }
     
     @State var decimal: Decimal = 1

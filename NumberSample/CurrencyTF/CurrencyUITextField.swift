@@ -31,13 +31,6 @@ class CurrencyUITextField: UITextField {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //update initial appearance
-    override func willMove(toSuperview newSuperview: UIView?) {
-        Self.logger.trace("willMove toSuperView")
-        super.willMove(toSuperview: superview)
-        self.text = formatter.string(for: decimal)
-    }
-    
     //prevent user from moving the cursor
     override func closestPosition(to point: CGPoint) -> UITextPosition? {
         return self.endOfDocument
