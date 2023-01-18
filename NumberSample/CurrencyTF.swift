@@ -2,7 +2,7 @@
 //  CurrencyTextField.swift
 //  NumberSample
 //
-//  Created by Benoit Pasquier on 10/2/22.
+//  Created by Aaron Anthony on 10/2/22.
 //
 
 import os
